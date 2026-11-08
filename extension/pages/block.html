@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Time's Up</title>
+  <link rel="stylesheet" href="../shared/styles.css" />
+  <style>
+    body { min-height: 100vh; display: grid; place-items: center; padding: 32px max(16px, 4vw); }
+    main { width: 100%; max-width: 860px; display: grid; grid-template-columns: minmax(200px, 280px) 1fr; gap: 56px; align-items: center; }
+    .dial { max-width: 280px; }
+    .copy { display: grid; gap: 20px; min-width: 0; }
+    .copy h1 { font-size: 38px; letter-spacing: -0.04em; }
+    .lede { color: var(--muted); font-size: 16px; max-width: 52ch; }
+    .plan { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; display: grid; gap: 4px; }
+    .plan p { font-size: 18px; font-weight: 500; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    .sos { border-top: 1px solid var(--line); padding-top: 18px; display: grid; gap: 10px; }
+    .sos p { font-size: 14px; color: var(--muted); max-width: 52ch; }
+    .meter { height: 4px; border-radius: 2px; background: var(--tick-off); overflow: hidden; }
+    .meter span { display: block; height: 100%; width: 0; background: var(--stop); transition: width 1s linear; }
+
+    @media (max-width: 720px) {
+      main { grid-template-columns: 1fr; gap: 28px; }
+      .dial { max-width: 200px; }
+      .copy h1 { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="dial" id="dial"></div>
+    <div class="copy">
+      <span id="eyebrow" hidden></span>
+      <h1 id="title">You chose your limit for today, and it's used up.</h1>
+      <p class="lede" id="lede"></p>
+
+      <div class="plan" id="goalBox">
+        <span class="label">You wanted time for</span>
+        <p id="goal"></p>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="close" type="button">Close this tab</button>
+        <button class="btn ghost" id="home" type="button" hidden></button>
+        <button class="btn ghost" id="back" type="button" hidden>Return to the video</button>
+      </div>
+
+      <div class="sos" id="sos">
+        <h2>Emergency pass</h2>
+        <p id="sosText"></p>
+        <div class="meter" id="meter" hidden><span id="meterFill"></span></div>
+        <div><button class="btn ghost" id="sosBtn" type="button" hidden></button></div>
+      </div>
+    </div>
+  </main>
+  <script src="../shared/common.js"></script>
+  <script src="block.js"></script>
+</body>
+</html>

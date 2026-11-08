@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Focus Setup</title>
+  <link rel="stylesheet" href="../shared/styles.css" />
+  <style>
+    body { min-height: 100vh; }
+    .shell { max-width: 1040px; margin: 0 auto; padding: 40px max(16px, 4vw) 64px; display: grid; gap: 40px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .brand { font-weight: 500; font-size: 16px; letter-spacing: -0.02em; display: flex; align-items: center; gap: 10px; }
+    .brand img { width: 24px; height: 24px; }
+
+    .steps { display: flex; gap: 6px; list-style: none; margin: 0; padding: 0; }
+    .steps li { width: 40px; height: 4px; border-radius: 2px; background: var(--tick-off); }
+    .steps li.done, .steps li.current { background: var(--accent); }
+
+    .layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 56px; align-items: start; }
+    .layout:not(:has(aside)) { grid-template-columns: minmax(0, 760px); }
+    .panel { display: grid; gap: 28px; min-width: 0; }
+    .panel h1 { font-size: 44px; letter-spacing: -0.045em; line-height: 1.05; max-width: 16ch; }
+    .panel .lede { color: var(--muted); font-size: 17px; max-width: 54ch; }
+    .field { display: grid; gap: 10px; }
+    .field label { font-weight: 500; }
+    .big { font-size: 20px; padding: 14px 16px; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chips button {
+      min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line);
+      background: transparent; color: var(--ink); font: 400 14px/1 var(--font-ui); cursor: pointer;
+      transition: border-color .15s ease, transform .12s ease;
+    }
+    .chips button:hover { border-color: var(--muted); }
+    .chips button:active { transform: scale(.97); }
+
+    .field-title { font-weight: 500; }
+
+    .sites { display: grid; border: 1px solid var(--line); border-radius: var(--radius); }
+    .site { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 16px; cursor: pointer; }
+    .site + .site { border-top: 1px solid var(--line); }
+    .site .meta { display: grid; gap: 2px; }
+
+    .nav { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; padding-top: 8px; }
+    .nav .hint { color: var(--muted); font-size: 13px; }
+
+    aside { position: sticky; top: 32px; display: grid; gap: 16px; padding: 24px; border-radius: 12px; background: var(--surface); }
+    aside .why { font-size: 14px; color: var(--muted); }
+
+    .summary { display: grid; gap: 0; border: 1px solid var(--line); border-radius: var(--radius); }
+    .summary div { display: grid; grid-template-columns: 140px 1fr; gap: 16px; padding: 14px 16px; }
+    .summary div + div { border-top: 1px solid var(--line); }
+    .summary dt { color: var(--muted); font-size: 14px; }
+    .summary dd { margin: 0; font-weight: 500; min-width: 0; }
+
+
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; gap: 32px; }
+      aside { position: static; }
+      .panel h1 { font-size: 34px; }
+        .summary div { grid-template-columns: 1fr; gap: 2px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="topbar">
+      <span class="brand"><img src="../assets/icons/icon-48.png" alt="" />Focus Is All You Need</span>
+      <ol class="steps" id="steps" aria-label="Setup progress">
+        <li></li><li></li><li></li>
+      </ol>
+    </div>
+
+    <div class="layout">
+      <!-- Step 1: an optional reminder of what the time is for -->
+      <section class="panel" data-step="0">
+        <span class="label">Step 1 of 2</span>
+        <h1>What do you want your time for?</h1>
+        <p class="lede">Optional. It shows up when you reach for short-form, as a quick reminder of what matters to you.</p>
+        <div class="field">
+          <label for="goal">I want my time for</label>
+          <input class="big" type="text" id="goal" maxlength="120" autocomplete="off" placeholder="For example, deep, focused work…" />
+          <div class="chips" data-for="goal">
+            <button type="button">deep, focused work</button>
+            <button type="button">my own projects</button>
+            <button type="button">the people around me</button>
+            <button type="button">a good night's sleep</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 2: the allowance (precommitment, set while calm) -->
+      <section class="panel" data-step="1" hidden>
+        <span class="label">Step 2 of 2</span>
+        <h1>How much short-form is fine on a normal day?</h1>
+        <p class="lede">Choose the number you'd agree with on a good day, not the one you'd pick mid-scroll. You can lower it whenever you like. Raising it takes 24 hours.</p>
+        <div class="field">
+          <span class="field-title">Minutes per day</span>
+          <div class="seg" id="presets" role="group" aria-label="Minutes per day">
+            <button type="button" data-min="0">0</button>
+            <button type="button" data-min="5">5</button>
+            <button type="button" data-min="10">10</button>
+            <button type="button" data-min="15">15</button>
+            <button type="button" data-min="30">30</button>
+            <button type="button" data-min="60">60</button>
+          </div>
+        </div>
+        <div class="field">
+          <span class="field-title">Limit it on</span>
+          <div class="sites">
+            <label class="site" for="w-youtube"><span class="meta"><span>YouTube Shorts</span><span class="url muted">youtube.com/shorts</span></span><span class="switch"><input type="checkbox" id="w-youtube" checked /><span></span></span></label>
+            <label class="site" for="w-instagram"><span class="meta"><span>Instagram Reels</span><span class="url muted">instagram.com/reels</span></span><span class="switch"><input type="checkbox" id="w-instagram" checked /><span></span></span></label>
+            <label class="site" for="w-tiktok"><span class="meta"><span>TikTok</span><span class="url muted">all of tiktok.com</span></span><span class="switch"><input type="checkbox" id="w-tiktok" checked /><span></span></span></label>
+          </div>
+          <p class="small muted">Other sites, like Reddit or Facebook Reels, can be added later in Settings.</p>
+          
+        </div>
+      </section>
+
+      <!-- Done -->
+      <section class="panel" data-step="2" hidden>
+                <h1>You're all set.</h1>
+        <p class="lede">Open a Short to see the pause once. After that, it only shows up when you reach for short-form.</p>
+        <dl class="summary">
+          <div id="sumGoalRow"><dt>Your reminder</dt><dd id="sumGoal"></dd></div>
+          <div><dt>Daily limit</dt><dd id="sumBudget"></dd></div>
+        </dl>
+      </section>
+    </div>
+
+    <div class="nav" id="nav">
+      <button class="btn ghost" id="back" type="button">Back</button>
+      <button class="btn" id="next" type="button" disabled>Next</button>
+      <button class="btn ghost" id="tryIt" type="button" hidden>Try it on a Short</button>
+      <span class="hint" id="hint" role="status"></span>
+    </div>
+  </div>
+
+  <template id="asides">
+    <aside data-for="0">
+      <p class="why">A short reminder of what you care about makes it easier to stop before you start scrolling.</p>
+    </aside>
+    <aside data-for="1">
+      <p class="why">Limits set ahead of time work better than willpower in the moment. People also tend to loosen their own rules later, which is why raising the limit waits a day.</p>
+    </aside>
+  </template>
+
+  <script src="../shared/common.js"></script>
+  <script src="welcome.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+{
+  "manifest_version": 3,
+  "name": "Focus Is All You Need",
+  "version": "1.0.0",
+  "description": "A daily allowance, a pause before you scroll, and a hard block for YouTube Shorts, Instagram Reels and TikTok.",
+  "permissions": [
+    "storage",
+    "scripting"
+  ],
+  "icons": {
+    "16": "assets/icons/icon-16.png",
+    "32": "assets/icons/icon-32.png",
+    "48": "assets/icons/icon-48.png",
+    "128": "assets/icons/icon-128.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "pages/popup.html",
+    "default_title": "Focus Is All You Need",
+    "default_icon": {
+      "16": "assets/icons/icon-16.png",
+      "32": "assets/icons/icon-32.png"
+    }
+  },
+  "options_page": "pages/options.html",
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://*.instagram.com/*",
+        "*://*.tiktok.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/fonts/*.woff2"
+      ],
+      "matches": [
+        "<all_urls>"
+      ],
+      "use_dynamic_url": true
+    }
+  ],
+  "optional_host_permissions": [
+    "*://*/*"
+  ]
+}

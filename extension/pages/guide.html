@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>How Focus Works</title>
+  <link rel="stylesheet" href="../shared/styles.css" />
+  <style>
+    .shell { max-width: 1080px; margin: 0 auto; padding: 48px max(16px, 4vw) 72px; display: grid; gap: 48px; }
+    .intro { display: grid; gap: 14px; max-width: 62ch; }
+    .intro h1 { font-size: 46px; letter-spacing: -0.045em; line-height: 1.05; }
+    .intro p { font-size: 17px; color: var(--muted); }
+
+    /* The three-beat summary of the whole loop */
+    .loop { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 12px; }
+    .loop div { padding: 20px 22px; display: grid; gap: 6px; }
+    .loop div + div { border-left: 1px solid var(--line); }
+    .loop strong { font-weight: 500; font-size: 17px; }
+    .loop p { color: var(--muted); font-size: 14px; }
+
+    ol.flow { list-style: none; margin: 0; padding: 0; display: grid; gap: 56px; counter-reset: s; }
+    .stage { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 48px; align-items: center; counter-increment: s; }
+    .stage .text { display: grid; gap: 12px; min-width: 0; }
+    .stage .when { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; }
+    .stage .when::before {
+      content: counter(s); display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%;
+      background: var(--ink); color: var(--paper); font: 500 13px/1 var(--font-ui);
+    }
+    .stage h2 { font-size: 26px; letter-spacing: -0.03em; }
+    .stage p { color: var(--muted); max-width: 52ch; }
+    .stage .do { display: grid; gap: 6px; margin: 4px 0 0; padding: 0; list-style: none; }
+    .stage .do { gap: 4px; padding-left: 18px; list-style: disc; }
+    .stage .do li { font-size: 15px; line-height: 1.5; padding-left: 2px; }
+    .stage .do li::marker { color: var(--muted); }
+    .stage .do strong { font-weight: 500; }
+    /* Every image sits in the same 4:3 frame, centered, so the steps line up. */
+    .shot { margin: 0; aspect-ratio: 4 / 3; container-type: size; display: grid; place-items: center; padding: clamp(16px, 3vw, 36px);
+      background: var(--surface); border-radius: 14px; overflow: hidden; min-width: 0; }
+    /* cqw/cqh = the frame's inner box, so tall and wide images both fit whole. */
+    .shot img { display: block; max-width: 100cqw; max-height: 100cqh; width: auto; height: auto; border-radius: 10px;
+      box-shadow: 0 1px 2px rgb(0 0 0 / .06), 0 14px 36px -18px rgb(0 0 0 / .28); }
+
+    .cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 28px; border-radius: 12px; background: var(--surface); }
+    .cta p { flex: 1 1 280px; font-size: 17px; }
+
+    @media (max-width: 820px) {
+      .intro h1 { font-size: 34px; }
+      .loop { grid-template-columns: 1fr; }
+      .loop div + div { border-left: 0; border-top: 1px solid var(--line); }
+      .stage { grid-template-columns: 1fr; gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="intro">
+      <h1>How it works, from setup to midnight</h1>
+      <p>You decide your rules once, while you're calm. After that the extension steps in only when you reach for short-form, and stays out of the way everywhere else.</p>
+    </header>
+
+    <section class="loop" aria-label="The loop in three parts">
+      <div><span class="label">Before</span><strong>You set the rules</strong><p>A daily limit, the sites, and a short reminder.</p></div>
+      <div><span class="label">During</span><strong>It slows you down</strong><p>A short pause, then a timer while you watch.</p></div>
+      <div><span class="label">After</span><strong>It holds your line</strong><p>Short-form closes until midnight. Everything else keeps working.</p></div>
+    </section>
+
+    <ol class="flow">
+      <li class="stage">
+        <div class="text">
+          <span class="when">Once, right after install</span>
+          <h2>Set your rules</h2>
+          <p>Two quick steps. Your choices come back at the moments you need them.</p>
+          <ul class="do"><li>What you want your time for (optional)</li><li>How many minutes a day are fine</li><li>Which sites to limit</li></ul>
+        </div>
+        <figure class="shot"><img src="../assets/guide/1-setup.png" alt="Setup page asking what you want your time back for" /></figure>
+      </li>
+
+      <li class="stage">
+        <div class="text">
+          <span class="when">Every time you open Shorts, Reels or TikTok</span>
+          <h2>A 10-second pause</h2>
+          <p>The video waits while you pick why you're here. Your reminder is on screen.</p>
+          <ul class="do"><li><strong>Back to YouTube</strong> leaves Shorts and counts as a win</li><li><strong>Continue</strong> opens after 10 seconds and a reason</li><li>No pause again for 15 minutes while you keep watching</li></ul>
+        </div>
+        <figure class="shot"><img src="../assets/guide/2-pause.png" alt="Pause screen asking what brings you here, with reason buttons" /></figure>
+      </li>
+
+      <li class="stage">
+        <div class="text">
+          <span class="when">While you watch</span>
+          <h2>A timer in the corner</h2>
+          <p>It counts down only while a short-form page is open and visible. It turns red for the last minute, so the block never comes as a surprise.</p>
+        </div>
+        <figure class="shot"><img src="../assets/guide/3-watching.png" alt="Short-form page with a small timer in the bottom right corner" /></figure>
+      </li>
+
+      <li class="stage">
+        <div class="text">
+          <span class="when">When your minutes run out</span>
+          <h2>Short-form closes until midnight</h2>
+          <p>You see your own reminder, not a scolding. Normal YouTube and Instagram still work.</p>
+          <ul class="do"><li><strong>Close this tab</strong> or <strong>Open YouTube home</strong></li><li>It opens again at midnight, a fresh start</li></ul>
+        </div>
+        <figure class="shot"><img src="../assets/guide/4-blocked.png" alt="Block page saying today's minutes are used up" /></figure>
+      </li>
+
+      <li class="stage">
+        <div class="text">
+          <span class="when">If something really can't wait</span>
+          <h2>One emergency pass a day</h2>
+          <p>Ask for a pass, wait 60 seconds, then watch for 5 minutes. The wait gives the urge time to pass on its own.</p>
+        </div>
+        <figure class="shot"><img src="../assets/guide/5-pass.png" alt="Emergency pass counting down 60 seconds" /></figure>
+      </li>
+
+      <li class="stage">
+        <div class="text">
+          <span class="when">Any time, from the toolbar</span>
+          <h2>Check your day</h2>
+          <p>Click the extension icon to see time left, your last 7 days, and how often you left early.</p>
+        </div>
+        <figure class="shot"><img src="../assets/guide/6-popup.png" alt="Popup with a dial showing minutes left and a 7-day chart" /></figure>
+      </li>
+
+      <li class="stage">
+        <div class="text">
+          <span class="when">When you want to change something</span>
+          <h2>Settings that protect you from yourself</h2>
+          <p>Stricter changes apply right away. Looser ones wait 24 hours, and you can cancel them, so you never decide mid-scroll.</p>
+          <ul class="do"><li>Add any other site, like <strong>reddit.com</strong> or <strong>facebook.com/reel</strong></li><li>Added sites share the same daily minutes</li><li>Removing a site also waits 24 hours</li></ul>
+        </div>
+        <figure class="shot"><img src="../assets/guide/7-settings.png" alt="Settings page with daily allowance, sites and plan" /></figure>
+      </li>
+    </ol>
+
+    <section class="cta">
+      <p>The fastest way to get it is to see the pause once.</p>
+      <a class="btn" href="https://www.youtube.com/shorts">Open a YouTube Short</a>
+      <a class="btn ghost" href="options.html">Settings</a>
+    </section>
+  </div>
+</body>
+</html>

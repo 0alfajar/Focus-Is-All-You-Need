@@ -1,0 +1,134 @@
+/* Design plan
+   Subject: a quiet browser companion that limits short-form video.
+   One memorable element: the clock (the dial and its digits, the only monospace on screen).
+   Everything else is quiet: one typeface, sentence case, left aligned, few containers.
+   Copy says what is happening and what you can do, in plain words. No eyebrow labels,
+   no uppercase tracking, no middle-dot strings, no arrow bullets.
+   Colour: white sheet, navy "biro" ink for text, one biro-blue accent; red only when time is up. */
+@font-face { font-family: "FIAYN Sans"; src: url("../assets/fonts/outfit.woff2") format("woff2"); font-weight: 300 700; font-display: swap; }
+@font-face { font-family: "FIAYN Mono"; src: url("../assets/fonts/dmmono-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "FIAYN Mono"; src: url("../assets/fonts/dmmono-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+
+:root {
+  --paper: #ffffff;
+  --surface: #f3f4f7;
+  --ink: #121b36;
+  --muted: #5a6380;
+  --line: #e1e4ec;
+  --accent: #1a4be0;
+  --accent-ink: #ffffff;
+  --accent-soft: #e8eefc;
+  --stop: #c4202f;
+  --stop-soft: #fce8ea;
+  --tick-off: #dfe1e6;
+
+  --font-ui: "FIAYN Sans", "Segoe UI", system-ui, sans-serif;
+  --font-num: "FIAYN Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --radius: 8px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0a0d14;
+    --surface: #131824;
+    --ink: #e8ecf6;
+    --muted: #8d97ad;
+    --line: #222a3a;
+    --accent: #5ab9fc;
+    --accent-ink: #0a0d14;
+    --accent-soft: #12263a;
+    --stop: #ff7a82;
+    --stop-soft: #3a1a20;
+    --tick-off: #252e40;
+    color-scheme: dark;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+::placeholder { color: var(--muted); opacity: .8; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 15px/1.5 var(--font-ui);
+}
+
+h1, h2, h3 { margin: 0; font-weight: 500; letter-spacing: -0.02em; text-wrap: balance; }
+h1 { font-size: 30px; line-height: 1.1; letter-spacing: -0.035em; }
+h2 { font-size: 17px; line-height: 1.3; }
+p { margin: 0; }
+a { color: var(--accent); }
+
+.label { font: 500 13px/1.4 var(--font-ui); color: var(--muted); }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+.num { font-variant-numeric: tabular-nums; }
+.url { font-family: var(--font-num); font-size: 13px; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 44px; padding: 0 18px;
+  border-radius: var(--radius); border: 1px solid transparent;
+  font: 500 15px/1 var(--font-ui); text-decoration: none; cursor: pointer;
+  background: var(--accent); color: var(--accent-ink);
+  transition: transform .12s ease, filter .15s ease, background-color .15s ease;
+}
+.btn:hover { transform: translateY(-1px); filter: brightness(1.06); }
+.btn:active { transform: translateY(0) scale(.98); filter: brightness(.96); }
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn.ghost:hover { background: var(--accent-soft); filter: none; }
+.btn:disabled { opacity: .45; cursor: not-allowed; filter: none; transform: none; }
+.btn:focus-visible, input:focus-visible, textarea:focus-visible, .seg button:focus-visible, .switch input:focus-visible + span {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+
+/* Dial */
+.dial { position: relative; width: 100%; max-width: 220px; aspect-ratio: 1; margin-inline: auto; }
+.dial svg { display: block; width: 100%; height: 100%; }
+.dial .tick { stroke: var(--tick-off); stroke-width: 2.5; stroke-linecap: round; }
+.dial .tick.on { stroke: var(--accent); }
+.dial.stop .tick.on { stroke: var(--stop); }
+.dial .face { position: absolute; inset: 18%; display: grid; place-content: center; text-align: center; gap: 4px; }
+.dial .time { font: 500 38px/1 var(--font-num); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.dial.stop .time { color: var(--stop); }
+.dial .caption { font: 400 13px/1.3 var(--font-ui); color: var(--muted); }
+
+/* Forms */
+input[type="number"], input[type="text"], textarea {
+  width: 100%; padding: 10px 12px;
+  border-radius: var(--radius); border: 1px solid var(--line);
+  background: var(--paper); color: var(--ink); font: inherit;
+}
+textarea { min-height: 84px; resize: vertical; line-height: 1.5; }
+
+.seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.seg button {
+  min-width: 52px; height: 44px; padding: 0 14px;
+  border-radius: var(--radius); border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink);
+  font: 500 15px/1 var(--font-ui); font-variant-numeric: tabular-nums; cursor: pointer;
+  transition: transform .12s ease, border-color .15s ease;
+}
+.seg button:hover { border-color: var(--muted); }
+.seg button:active { transform: scale(.96); }
+.seg button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+.switch { position: relative; display: inline-flex; flex: none; }
+.switch input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.switch span {
+  width: 40px; height: 24px; border-radius: 999px; background: var(--tick-off);
+  transition: background-color .15s ease; position: relative; pointer-events: none;
+}
+.switch span::after {
+  content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%;
+  background: var(--surface); box-shadow: 0 1px 2px rgb(0 0 0 / .25); transition: transform .15s ease;
+}
+.switch input:checked + span { background: var(--accent); }
+.switch input:checked + span::after { transform: translateX(16px); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}

@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Focus Settings</title>
+  <link rel="stylesheet" href="../shared/styles.css" />
+  <style>
+    .wrap { max-width: 720px; margin: 0 auto; padding-inline: 24px; }
+    .top { padding-block: 48px 28px; display: grid; gap: 10px; }
+    .top p { max-width: 58ch; color: var(--muted); }
+
+    .pending { display: flex; gap: 16px; align-items: center; justify-content: space-between; flex-wrap: wrap;
+      padding: 14px 16px; margin-bottom: 24px; border-radius: var(--radius);
+      background: var(--accent-soft); border: 1px solid var(--line); }
+    .pending p { min-width: 0; flex: 1 1 320px; font-size: 14px; }
+
+    form { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+    .section { display: grid; grid-template-columns: 200px 1fr; gap: 24px; padding: 24px; }
+    .section + .section { border-top: 1px solid var(--line); }
+    .section > header { display: grid; gap: 6px; align-content: start; }
+    .section > header p { color: var(--muted); font-size: 13px; }
+    .field { display: grid; gap: 12px; min-width: 0; }
+
+    .custom { display: flex; align-items: center; gap: 10px; }
+    .custom input { width: 96px; font-family: var(--font-num); padding: 10px 12px; border-radius: var(--radius);
+      border: 1px solid var(--line); background: var(--paper); color: var(--ink); font-size: 15px; }
+
+    .site { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 0; cursor: pointer; }
+    .site + .site { border-top: 1px solid var(--line); }
+    .site .meta { display: grid; gap: 2px; min-width: 0; }
+    .site .name { font-weight: 500; }
+
+    .field-title { font-weight: 500; }
+    .custom-sites { display: grid; gap: 10px; padding-top: 16px; margin-top: 4px; border-top: 1px solid var(--line); }
+    .clist { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+    .clist li { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 8px 8px 12px;
+      border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); }
+    .clist .host { font: 400 14px/1.3 var(--font-num); min-width: 0; overflow-wrap: anywhere; }
+    .clist .tag { font-size: 12px; color: var(--muted); }
+    .clist li.removing .host { text-decoration: line-through; color: var(--muted); }
+    .clist button { min-height: 36px; padding: 0 12px; border-radius: var(--radius); border: 1px solid transparent; background: transparent;
+      color: var(--muted); font: 500 13px/1 var(--font-ui); cursor: pointer; }
+    .clist button:hover { color: var(--ink); border-color: var(--line); }
+    .clist .row-actions { display: flex; gap: 4px; flex: none; }
+    .clist li.editing { padding: 6px; gap: 8px; }
+    .clist li.editing input { flex: 1; min-width: 0; padding: 8px 10px; font: 400 14px/1.3 var(--font-num); }
+    .clist button.primary { background: var(--accent); color: var(--accent-ink); }
+    .clist button.primary:hover { color: var(--accent-ink); filter: brightness(1.06); }
+    .cadd { display: flex; gap: 8px; }
+    .seg.mode button { font-family: var(--font-ui); min-width: 88px; }
+    .cadd input { flex: 1; min-width: 0; font-family: var(--font-num); font-size: 14px; }
+    #siteMsg.err { color: var(--stop); }
+
+    .savebar { position: sticky; bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 14px 24px; border-top: 1px solid var(--line); background: var(--surface); border-radius: 0 0 10px 10px; }
+    #status { font-size: 13px; color: var(--muted); }
+    #status.ok { color: var(--accent); }
+
+
+    @media (max-width: 640px) {
+      .wrap { padding-inline: 16px; }
+      .section { grid-template-columns: 1fr; gap: 14px; padding: 20px 16px; }
+      .savebar { padding: 12px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <h1>Settings</h1>
+      <p>Stricter changes apply right away. Looser ones wait 24 hours, so you make them with a clear head and not halfway through a scroll.</p>
+    </div>
+
+    <div class="pending" id="pending" hidden>
+      <p id="pendingText"></p>
+      <button class="btn ghost" id="cancelPending" type="button">Cancel this change</button>
+    </div>
+
+    <form id="form" novalidate>
+      <section class="section">
+        <header>
+          <h2>Daily allowance</h2>
+          <p>One budget shared by every site below. It resets at midnight.</p>
+        </header>
+        <div class="field">
+          <div class="seg" id="presets" role="group" aria-label="Minutes per day">
+            <button type="button" data-min="0">0</button>
+            <button type="button" data-min="5">5</button>
+            <button type="button" data-min="10">10</button>
+            <button type="button" data-min="15">15</button>
+            <button type="button" data-min="30">30</button>
+            <button type="button" data-min="60">60</button>
+          </div>
+          <label class="custom small muted" for="budget">
+            <input type="text" id="budget" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" />
+            minutes per day (0 to 240)
+          </label>
+        </div>
+      </section>
+
+      <section class="section">
+        <header>
+          <h2>Where it applies</h2>
+          <p>Only the short-form part of each site is limited. The rest keeps working.</p>
+        </header>
+        <div class="field" style="gap:0">
+          <label class="site" for="site-youtube">
+            <span class="meta"><span class="name">YouTube Shorts</span><span class="url muted">youtube.com/shorts</span></span>
+            <span class="switch"><input type="checkbox" id="site-youtube" /><span></span></span>
+          </label>
+          <label class="site" for="site-instagram">
+            <span class="meta"><span class="name">Instagram Reels</span><span class="url muted">instagram.com/reels</span></span>
+            <span class="switch"><input type="checkbox" id="site-instagram" /><span></span></span>
+          </label>
+          <label class="site" for="site-tiktok">
+            <span class="meta"><span class="name">TikTok</span><span class="url muted">all of tiktok.com</span></span>
+            <span class="switch"><input type="checkbox" id="site-tiktok" /><span></span></span>
+          </label>
+          <div class="custom-sites">
+            <span class="field-title">Other sites</span>
+            <ul class="clist" id="clist"></ul>
+            <div class="seg mode" id="mode" role="group" aria-label="What happens on this site">
+              <button type="button" data-mode="block" aria-pressed="true">Block</button>
+              <button type="button" data-mode="limit" aria-pressed="false">Limit</button>
+            </div>
+            <p class="small muted" id="modeHelp"></p>
+            <div class="cadd">
+              <input type="text" id="newSite" autocomplete="off" spellcheck="false" placeholder="reddit.com or facebook.com/reel…" aria-label="Add a site" />
+              <button class="btn ghost" id="addSite" type="button">Add site</button>
+            </div>
+            <p class="small muted" id="siteMsg" role="status">Add a whole site, or part of one by including a path. Chrome will ask for permission to run on it.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <header>
+          <h2>Your reminder</h2>
+          <p>Optional. Shown when you reach for short-form.</p>
+        </header>
+        <div class="field">
+          <label class="small muted" for="goal">I want my time for</label>
+          <input type="text" id="goal" maxlength="120" autocomplete="off" placeholder="For example, deep, focused work…" />
+        </div>
+      </section>
+
+      <div class="savebar">
+        <span id="status" role="status">No unsaved changes</span>
+        <button class="btn" id="save" type="submit" disabled>Save changes</button>
+      </div>
+    </form>
+
+  </div>
+  <script src="../shared/common.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

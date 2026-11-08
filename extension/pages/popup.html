@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Focus</title>
+  <link rel="stylesheet" href="../shared/styles.css" />
+  <style>
+    body { width: 320px; }
+    header { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+    header img { width: 20px; height: 20px; }
+    .brand { font-weight: 500; font-size: 15px; letter-spacing: -0.02em; }
+    .hero { padding: 22px 16px 18px; display: grid; gap: 14px; }
+    .hero .dial { max-width: 184px; }
+    .dial .time.long { font-size: 30px; }
+    .headline { text-align: center; font-size: 15px; line-height: 1.4; max-width: 28ch; margin-inline: auto; text-wrap: balance; }
+    .headline .sub { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
+    .stats .label { white-space: nowrap; }
+    .stats { display: grid; grid-template-columns: repeat(2, 1fr); border-top: 1px solid var(--line); }
+    .stats div { padding: 12px 16px; display: grid; gap: 2px; }
+    .stats div + div { border-left: 1px solid var(--line); }
+    .stats .v { font: 500 18px/1.2 var(--font-ui); font-variant-numeric: tabular-nums; }
+    .week { padding: 14px 16px 16px; border-top: 1px solid var(--line); display: grid; gap: 10px; }
+    .week .head { display: flex; justify-content: space-between; align-items: baseline; }
+    .bars { position: relative; display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; height: 64px; align-items: end; }
+    .bars .limit { position: absolute; left: 0; right: 0; border-top: 1px dashed var(--muted); opacity: .6; pointer-events: none; }
+    .bar { position: relative; height: 100%; display: flex; align-items: flex-end; }
+    .bar span { display: block; width: 100%; min-height: 2px; border-radius: 3px 3px 0 0; background: var(--tick-off); }
+    .bar.today span { background: var(--accent); }
+    .bar.over span { background: var(--stop); }
+    .days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; text-align: center; font: 400 11px/1 var(--font-ui); color: var(--muted); }
+    .days .today { color: var(--ink); }
+    .setup { margin: 0 16px 12px; padding: 12px; border-radius: var(--radius); background: var(--accent-soft); display: grid; gap: 8px; font-size: 13px; }
+    .notice { margin: 0 16px 12px; padding: 10px 12px; border-radius: var(--radius); background: var(--accent-soft); font-size: 13px; }
+    footer { display: flex; gap: 8px; padding: 12px 16px 16px; border-top: 1px solid var(--line); }
+    footer .btn { flex: 1; }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="../assets/icons/icon-32.png" alt="" />
+    <span class="brand">Focus Is All You Need</span>
+  </header>
+
+  <section class="hero">
+    <div class="dial" id="dial"></div>
+    <p class="headline" id="headline"></p>
+  </section>
+
+  <div class="setup" id="setup" hidden>
+    <span>Set your reason and if-then plan so they show up when you need them.</span>
+    <button class="btn" id="openSetup" type="button">Finish setup</button>
+  </div>
+  <p class="notice" id="notice" hidden></p>
+
+  <section class="stats" aria-label="Today">
+    <div><span class="label">Watched today</span><span class="v" id="used">0:00</span></div>
+    <div title="Times you left at the pause screen"><span class="label">Times you left early</span><span class="v" id="resisted">0</span></div>
+  </section>
+
+  <section class="week" aria-labelledby="weekLabel">
+    <div class="head"><span class="label" id="weekLabel">Last 7 days</span><span class="small muted num" id="weekAvg"></span></div>
+    <div class="bars" id="bars" role="img"></div>
+    <p class="small muted" id="weekEmpty" hidden>No short-form watched in the last 7 days.</p>
+    <div class="days" id="days" aria-hidden="true"></div>
+  </section>
+
+  <footer>
+    <button class="btn ghost" id="guide" type="button">How it works</button>
+    <button class="btn ghost" id="settings" type="button">Settings</button>
+  </footer>
+
+  <script src="../shared/common.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
