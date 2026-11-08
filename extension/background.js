@@ -2,7 +2,7 @@
 // All state lives in chrome.storage.local because MV3 workers can be killed at any time.
 
 // goal: an optional short reminder of what the user wants their time for,
-// shown at the pause and on the block page (see RESEARCH.md).
+// shown at the pause and on the block page.
 const DEFAULT_SETTINGS = {
   budgetMinutes: 15,
   sites: { youtube: true, instagram: true, tiktok: true },

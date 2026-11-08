@@ -1,6 +1,21 @@
-# Focus Is All You Need
+<p align="center">
+  <img src="extension/assets/icons/icon-128.png" alt="" width="88" height="88">
+</p>
 
-A Chrome extension that puts a daily limit on YouTube Shorts, Instagram Reels and TikTok, so short videos stop taking the time you meant for something else.
+<h1 align="center">Focus Is All You Need</h1>
+
+<p align="center">
+  A Chrome extension that puts a daily limit on YouTube Shorts, Instagram Reels and TikTok,<br>
+  so short videos stop taking the time you meant for something else.
+</p>
+
+<p align="center">
+  <a href="https://github.com/0alfajar/Focus-Is-All-You-Need/releases/latest"><strong>Download</strong></a>
+  &nbsp;&nbsp;·&nbsp;&nbsp;
+  <a href="#install">Install</a>
+  &nbsp;&nbsp;·&nbsp;&nbsp;
+  <a href="#privacy-and-permissions">Privacy</a>
+</p>
 
 <p align="center">
   <img src="extension/assets/guide/2-pause.png" alt="The pause screen that appears before Shorts: a question, three one-tap reasons, a button back to YouTube and a Continue button with a countdown" width="560">
@@ -24,11 +39,11 @@ Scrolling short videos is mostly habit, not a decision. Willpower in the moment 
 
 ## Install
 
-The extension isn't on the Chrome Web Store yet. To install it from source:
+The extension isn't on the Chrome Web Store yet. You can install it in about a minute:
 
-1. Clone this repository or download it as a ZIP and unzip it.
-2. Open `chrome://extensions` and turn on **Developer mode**.
-3. Click **Load unpacked** and select the `extension` folder.
+1. Download `focus-is-all-you-need-v1.0.0.zip` from the [latest release](https://github.com/0alfajar/Focus-Is-All-You-Need/releases/latest) and unzip it.
+2. Open `chrome://extensions` and turn on **Developer mode** in the top right.
+3. Click **Load unpacked** and select the unzipped `focus-is-all-you-need` folder.
 4. Pin the extension from the puzzle icon in the toolbar.
 
 A two-step setup opens on first install. It works in Chrome and other Chromium browsers such as Edge, Brave and Arc.
@@ -61,7 +76,7 @@ Settings and usage are stored with `chrome.storage.local` on your device. The ex
 
 ## Development
 
-There is no build step. Edit the files in `extension/`, then click reload on the extension card and refresh any open tabs.
+There is no build step. Clone the repository, load the `extension` folder with **Load unpacked**, and edit the files directly. After a change, click reload on the extension card and refresh any open tabs.
 
 ```bash
 npm install   # installs Puppeteer and Chrome for Testing
@@ -80,8 +95,6 @@ extension/
 ├── pages/             Popup, settings, setup, block page, walkthrough
 ├── shared/            Design tokens (styles.css) and helpers (common.js)
 └── assets/            Fonts, icons, walkthrough screenshots
-docs/
-└── RESEARCH.md        The research behind each part of the flow
 tests/
 └── e2e.mjs            End-to-end tests with Puppeteer
 ```
@@ -92,7 +105,7 @@ Issues and pull requests are welcome. Before opening a pull request:
 
 - Run `npm test` and make sure every test passes.
 - Keep UI copy short and plain, written from the user's side, and in sentence case.
-- Keep research citations in `docs/RESEARCH.md`, not in the interface.
+- Keep the interface free of jargon and citations.
 
 ## License
 
