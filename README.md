@@ -17,10 +17,6 @@
   <a href="#privacy-and-permissions">Privacy</a>
 </p>
 
-<p align="center">
-  <img src="extension/assets/guide/2-pause.png" alt="The pause screen that appears before Shorts: a question, three one-tap reasons, a button back to YouTube and a Continue button with a countdown" width="560">
-</p>
-
 ## Why
 
 Scrolling short videos is mostly habit, not a decision. Willpower in the moment is unreliable, so this extension doesn't depend on it. You set your limits once, while you're calm. A short pause breaks the automatic loop when you reach for a feed. When your time is up, short-form closes until midnight and the rest of the site keeps working.
